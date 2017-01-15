@@ -1,6 +1,6 @@
 package com.seveniu.spider.pageProcessor;
 
-import com.seveniu.consumer.Consumer;
+import com.seveniu.user.CrawlerUser;
 import com.seveniu.entity.data.Node;
 import com.seveniu.entity.data.PageResult;
 import com.seveniu.spider.parse.ParseResult;
@@ -20,7 +20,7 @@ import static com.seveniu.def.PageContext.CONTEXT_NODE;
 public class TestSinglePageProcessor extends MyPageProcessor {
 
 
-    public TestSinglePageProcessor(PagesTemplate pagesTemplate, Consumer consumer) {
+    public TestSinglePageProcessor(PagesTemplate pagesTemplate, CrawlerUser consumer) {
         super(pagesTemplate, consumer);
     }
 

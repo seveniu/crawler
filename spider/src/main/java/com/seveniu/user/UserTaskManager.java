@@ -1,9 +1,12 @@
-package com.seveniu.consumer;
+package com.seveniu.user;
 
 import com.seveniu.SpiderRegulate;
 import com.seveniu.def.TaskStatus;
 import com.seveniu.entity.task.TaskInfo;
-import com.seveniu.spider.*;
+import com.seveniu.spider.MySpider;
+import com.seveniu.spider.SpiderFactory;
+import com.seveniu.spider.SpiderTask;
+import com.seveniu.spider.TemplateType;
 import com.seveniu.task.TaskStatistic;
 import com.seveniu.template.PagesTemplate;
 import org.slf4j.Logger;
@@ -18,28 +21,23 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by seveniu on 6/7/16.
  * ConsumerTaskManager
  */
-public class ConsumerTaskManager {
+public class UserTaskManager {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final int CORE_RUNNING = 20;
     private static final int MAX_RUNNING = 30;
     private static final int MAX_WAIT = 1000;
-//    private static final int CORE_RUNNING = 1;
-//    private static final int MAX_RUNNING = 1;
-//    private static final int MAX_WAIT = 1;
 
     private ThreadPoolExecutor spiderExecServer;
     private ConcurrentHashMap<String, MySpider> runningSpider;
     private ConcurrentHashMap<String, MySpider> allSpider = new ConcurrentHashMap<>();
-    private volatile boolean stop = false;
-    private int count = 0;
 
-    private Consumer consumer;
+    private CrawlerUser consumer;
 
-    ConsumerTaskManager(Consumer consumer) {
+    UserTaskManager(CrawlerUser consumer) {
         this.consumer = consumer;
     }
 
-    public void start() {
+    void start() {
         runningSpider = new ConcurrentHashMap<>(MAX_RUNNING);
 
         spiderExecServer = new SpiderThreadPoolExecutor(CORE_RUNNING, MAX_RUNNING,
@@ -60,7 +58,7 @@ public class ConsumerTaskManager {
      * 添加任务
      * 返回 任务状态
      */
-    public TaskStatus addTask(TaskInfo taskInfo) {
+    TaskStatus addTask(TaskInfo taskInfo) {
 
         // 优先级 小于 100 并且 等待队列满的时候, 返回 FULL
         // 如果优先级 大于等于 100, 不管队列是否满, 都立即执行
@@ -113,20 +111,17 @@ public class ConsumerTaskManager {
 
     void stop() {
         synchronized (LOCK) {
-            stop = true;
-            if (!stop) {
-                for (MySpider mySpider : runningSpider.values()) {
-                    mySpider.stop();
-                }
-                spiderExecServer.shutdownNow();
-                allSpider.clear();
-                runningSpider.clear();
+            for (MySpider mySpider : runningSpider.values()) {
+                mySpider.stop();
             }
+            spiderExecServer.shutdownNow();
+            allSpider.clear();
+            runningSpider.clear();
         }
     }
 
 
-    private String generateTaskId(Consumer consumer, TaskInfo taskInfo) {
+    private String generateTaskId(CrawlerUser consumer, TaskInfo taskInfo) {
         return consumer.getName() +
                 "-" + taskInfo.getId() +
                 "-" + taskInfo.getTemplateId();
@@ -146,7 +141,7 @@ public class ConsumerTaskManager {
         return spiderInfo;
     }
 
-    public List<TaskStatistic> getRunningTaskInfo() {
+    List<TaskStatistic> getRunningTaskInfo() {
         synchronized (LOCK) {
             List<TaskStatistic> taskStatisticList = new ArrayList<>();
             for (MySpider mySpider : runningSpider.values()) {
@@ -208,16 +203,16 @@ public class ConsumerTaskManager {
         }
     }
 
-    public int getMaxRunning() {
+    int getMaxRunning() {
         return MAX_RUNNING;
     }
 
-    public int getMaxWait() {
+    int getMaxWait() {
         return MAX_WAIT;
     }
 
 
-    public int getCurRunningSize() {
+    int getCurRunningSize() {
         return spiderExecServer.getActiveCount();
     }
 }

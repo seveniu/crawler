@@ -1,6 +1,6 @@
 package com.seveniu.spider.pageProcessor;
 
-import com.seveniu.consumer.Consumer;
+import com.seveniu.user.CrawlerUser;
 import com.seveniu.def.PageContext;
 import com.seveniu.entity.data.Node;
 import com.seveniu.task.TaskStatistic;
@@ -24,13 +24,13 @@ public abstract class MyPageProcessor implements PageProcessor {
     static final String SERIAL_NUM = "serialNum";
     static final String TEMPLATE = "serialNum";
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected Consumer consumer;
+    protected CrawlerUser consumer;
 
     PagesTemplate pagesTemplate;
     TaskStatistic statistic;
     String taskId;
 
-    public MyPageProcessor(PagesTemplate pagesTemplate, Consumer consumer) {
+    public MyPageProcessor(PagesTemplate pagesTemplate, CrawlerUser consumer) {
         this.pagesTemplate = pagesTemplate;
         this.consumer = consumer;
     }

@@ -1,4 +1,4 @@
-package com.seveniu.consumer.remote;
+package com.seveniu.user.remote;
 
 import com.seveniu.util.Json;
 import org.apache.commons.lang3.StringUtils;

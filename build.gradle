@@ -61,9 +61,7 @@ subprojects {
         // Spring Boot 对这些运维相关的功能进行了整合，形成了一个功能完备和可定制的功能集，称之为 Actuator。
         compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
 
-        compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-        compile("org.springframework.boot:spring-boot-starter-remote-shell:${springBootVersion}")
-        compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+          compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
         compile("mysql:mysql-connector-java:+")
 
         if (profile != "stable") {

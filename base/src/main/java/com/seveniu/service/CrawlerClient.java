@@ -1,21 +1,23 @@
 package com.seveniu.service;
 
-import com.seveniu.entity.task.ConsumerConfig;
-import com.seveniu.entity.task.ResourceInfo;
-import com.seveniu.entity.task.TaskInfo;
+import com.seveniu.def.TaskStatus;
+import com.seveniu.entity.data.Node;
+import com.seveniu.task.TaskStatistic;
 
 /**
- * Created by seveniu on 1/8/17.
- * *
+ * Created by seveniu on 5/26/16.
+ * Consumer
  */
 public interface CrawlerClient {
-    void reg(String host, ConsumerConfig consumerConfig);
 
-    String getRunningTasks();
+    boolean has(String url);
 
-    ResourceInfo getResourceInfo();
+    void done(Node node);
 
-    void addTask(TaskInfo taskInfo);
+    void statistic(TaskStatistic statistic);
 
-    String getTaskSummary();
+    void taskStatusChange(String taskId, TaskStatus taskStatus);
+
+    void stop();
+
 }

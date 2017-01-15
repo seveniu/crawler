@@ -1,9 +1,9 @@
-package com.seveniu.consumer.remote;
+package com.seveniu.user.remote;
 
-import com.seveniu.consumer.ConsumerClient;
 import com.seveniu.def.TaskStatus;
 import com.seveniu.entity.data.Node;
-import com.seveniu.entity.task.ConsumerConfig;
+import com.seveniu.service.CrawlerClient;
+import com.seveniu.service.RequestBody;
 import com.seveniu.task.TaskStatistic;
 import com.seveniu.util.Json;
 import org.apache.commons.io.IOUtils;
@@ -18,45 +18,52 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by seveniu on 5/24/16.
  * RemoteConsumer
  */
-public class HttpRemoteConsumer implements ConsumerClient {
+public class HttpRemoteConsumer implements CrawlerClient {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private ConsumerConfig remoteConsumerConfig;
-
     private RemoteRequest remoteRequest;
+    private String requestUrl;
 
-    public HttpRemoteConsumer(ConsumerConfig remoteConsumerConfig) {
-        this.remoteConsumerConfig = remoteConsumerConfig;
+    public HttpRemoteConsumer(String host) {
+        this.requestUrl = host + "/crawler/consumer";
         this.remoteRequest = new RemoteRequest();
     }
 
+
     @Override
     public boolean has(String url) {
-
-        return Boolean.valueOf(remoteRequest.send(remoteConsumerConfig.getDuplicateUrl(), url));
+        RequestBody requestBody = new RequestBody("has", url);
+        return Boolean.valueOf(remoteRequest.send(requestUrl, requestBody));
     }
 
     @Override
     public void done(Node node) {
-        remoteRequest.send(remoteConsumerConfig.getDoneUrl(), Json.toJson(node));
+        RequestBody requestBody = new RequestBody("done", Json.toJson(node));
+        remoteRequest.send(requestUrl, requestBody);
     }
 
 
     @Override
     public void statistic(TaskStatistic statistic) {
-        remoteRequest.send(remoteConsumerConfig.getStatisticUrl(), Json.toJson(statistic));
+        RequestBody requestBody = new RequestBody("statistic", Json.toJson(statistic));
+        remoteRequest.send(requestUrl, requestBody);
     }
 
     @Override
     public void taskStatusChange(String taskId, TaskStatus taskStatus) {
-
+        Map<String, Object> map = new HashMap<>();
+        map.put("taskId", taskId);
+        map.put("status", taskStatus);
+        RequestBody requestBody = new RequestBody("taskStatusChange", Json.toJson(map));
+        remoteRequest.send(requestUrl, requestBody);
     }
 
-    @Override
     public void stop() {
         try {
             remoteRequest.close();
@@ -66,11 +73,10 @@ public class HttpRemoteConsumer implements ConsumerClient {
         }
     }
 
-
     private class RemoteRequest {
         CloseableHttpClient httpClient;
 
-        public RemoteRequest() {
+        RemoteRequest() {
             this.httpClient = HttpClients.createDefault();
         }
 
@@ -78,13 +84,13 @@ public class HttpRemoteConsumer implements ConsumerClient {
             httpClient.close();
         }
 
-        public String send(String url, String body) {
+        String send(String url, RequestBody body) {
             InputStream inputStream = null;
             CloseableHttpResponse response = null;
             try {
                 HttpPost post = new HttpPost(url);
                 if (body != null) {
-                    post.setEntity(new StringEntity(body));
+                    post.setEntity(new StringEntity(Json.toJson(body)));
                 }
                 response = httpClient.execute(post);
                 HttpEntity entity = response.getEntity();

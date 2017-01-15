@@ -1,6 +1,6 @@
 package com.seveniu.spider.pageProcessor;
 
-import com.seveniu.consumer.Consumer;
+import com.seveniu.user.CrawlerUser;
 import com.seveniu.entity.data.Link;
 import com.seveniu.entity.data.Node;
 import com.seveniu.entity.data.PageResult;
@@ -18,7 +18,7 @@ import static com.seveniu.def.PageContext.CONTEXT_NODE;
  * MyPageProcessor
  */
 public class MultiListContentProcessor extends MyPageProcessor {
-    public MultiListContentProcessor(PagesTemplate pagesTemplate, Consumer consumer) {
+    public MultiListContentProcessor(PagesTemplate pagesTemplate, CrawlerUser consumer) {
         super(pagesTemplate, consumer);
     }
 

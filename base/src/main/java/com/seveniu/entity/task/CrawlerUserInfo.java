@@ -1,11 +1,11 @@
 package com.seveniu.entity.task;
 
-public class ResourceInfo {
+public class CrawlerUserInfo {
 
-    public ResourceInfo() {
+    public CrawlerUserInfo() {
     }
 
-    public ResourceInfo(int maxRunning, int maxWait, int curRunning, int curWait) {
+    public CrawlerUserInfo(int maxRunning, int maxWait, int curRunning, int curWait) {
         this.maxRunning = maxRunning;
         this.maxWait = maxWait;
         this.curRunning = curRunning;

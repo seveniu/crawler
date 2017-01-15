@@ -1,6 +1,6 @@
 package com.seveniu.spider.pipeline;
 
-import com.seveniu.consumer.Consumer;
+import com.seveniu.user.CrawlerUser;
 import com.seveniu.def.PageContext;
 import com.seveniu.entity.data.Node;
 import org.slf4j.Logger;
@@ -19,9 +19,9 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 public class MyPipeLine implements Pipeline {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Consumer consumer;
+    private CrawlerUser consumer;
 
-    public MyPipeLine(Consumer consumer) {
+    public MyPipeLine(CrawlerUser consumer) {
         this.consumer = consumer;
     }
 

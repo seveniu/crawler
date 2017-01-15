@@ -1,6 +1,6 @@
 package com.seveniu.spider;
 
-import com.seveniu.consumer.Consumer;
+import com.seveniu.user.CrawlerUser;
 import com.seveniu.spider.pageProcessor.MultiListContentProcessor;
 import com.seveniu.spider.pageProcessor.TestSinglePageProcessor;
 import com.seveniu.spider.pipeline.MyPipeLine;
@@ -14,7 +14,7 @@ import com.seveniu.entity.task.TaskInfo;
  */
 public class SpiderFactory {
 
-    public static MySpider getSpider(String id, TemplateType templateType, TaskInfo taskInfo, Consumer consumer, PagesTemplate pagesTemplate) {
+    public static MySpider getSpider(String id, TemplateType templateType, TaskInfo taskInfo, CrawlerUser consumer, PagesTemplate pagesTemplate) {
         TaskStatistic taskStatistic = new TaskStatistic(taskInfo.getId());
         taskStatistic.setStartUrlCount(taskInfo.getUrls().size());
         switch (templateType) {

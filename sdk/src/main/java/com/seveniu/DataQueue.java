@@ -1,6 +1,6 @@
 package com.seveniu;
 
-import com.seveniu.consumer.Consumer;
+import com.seveniu.service.CrawlerClient;
 import com.seveniu.entity.data.Node;
 import com.seveniu.util.DBUtil;
 import com.seveniu.util.Json;
@@ -25,12 +25,12 @@ public class DataQueue {
 
     private final static String PREFIX = "data-";
     private String key;
-    private Consumer consumer;
+    private CrawlerClient crawlerClient;
     private int threadNum = 20;
 
-    public DataQueue(String key, Consumer consumer) {
+    public DataQueue(String key, CrawlerClient crawlerClient) {
         this.key = key;
-        this.consumer = consumer;
+        this.crawlerClient = crawlerClient;
     }
 
     private ThreadPoolExecutor threadPoolExecutor;
@@ -84,7 +84,7 @@ public class DataQueue {
                                 @Override
                                 public void run() {
                                     try {
-                                        consumer.done(Json.toObject(data, Node.class));
+                                        crawlerClient.done(Json.toObject(data, Node.class));
                                         DBUtil.update("delete from queue where id =?", id);
                                         TimeUnit.SECONDS.sleep(1);
                                     } catch (Exception e) {
@@ -142,8 +142,8 @@ public class DataQueue {
         this.key = key;
     }
 
-    public void setConsumer(Consumer consumer) {
-        this.consumer = consumer;
+    public void setCrawlerClient(CrawlerClient crawlerClient) {
+        this.crawlerClient = crawlerClient;
     }
 
     public void setThreadNum(int threadNum) {

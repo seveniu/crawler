@@ -1,7 +1,7 @@
 package com.seveniu;
 
-import com.seveniu.consumer.Consumer;
-import com.seveniu.consumer.ConsumerManager;
+import com.seveniu.user.CrawlerUser;
+import com.seveniu.user.UserManager;
 import com.seveniu.spider.SpiderTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class SpiderRegulate {
     private static final int THREAD_THRESHOLD = 200;
     private Logger logger = LoggerFactory.getLogger(SpiderRegulate.class);
     @Autowired
-    ConsumerManager consumerManager;
+    UserManager userManager;
 
     private LinkedBlockingQueue<SpiderTask> waitTaskQueue = new LinkedBlockingQueue<>();
     private LinkedBlockingQueue<SpiderTask> runningTask = new LinkedBlockingQueue<>();
@@ -39,9 +39,9 @@ public class SpiderRegulate {
     }
 
     public List<SpiderInfo> consumerSpiderInfo() {
-        Collection<Consumer> consumers = consumerManager.getAllConsumer();
+        Collection<CrawlerUser> consumers = userManager.getAllConsumer();
         List<SpiderInfo> spiderInfoList = new ArrayList<>(consumers.size());
-        for (Consumer consumer : consumers) {
+        for (CrawlerUser consumer : consumers) {
 
             spiderInfoList.add(consumer.getTaskManager().getSpiderInfo());
         }

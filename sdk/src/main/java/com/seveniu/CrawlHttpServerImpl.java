@@ -1,11 +1,12 @@
 package com.seveniu;
 
-import com.seveniu.consumer.Consumer;
-import com.seveniu.crawlClient.TaskQueue;
-import com.seveniu.entity.task.ConsumerConfig;
-import com.seveniu.entity.task.ResourceInfo;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.seveniu.entity.task.CrawlerUserInfo;
 import com.seveniu.entity.task.TaskInfo;
+import com.seveniu.service.CrawlerServer;
 import com.seveniu.service.CrawlerClient;
+import com.seveniu.service.task.TaskQueue;
+import com.seveniu.task.TaskStatistic;
 import com.seveniu.util.Json;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -23,38 +24,54 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by seveniu on 7/3/16.
  * CrawlClient
  */
-public class CrawlClientImpl implements CrawlerClient {
+@Component
+public class CrawlHttpServerImpl implements CrawlerServer {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private HttpClient httpClient;
     private String host = "http://127.0.0.1:20001";
 
-    private TaskQueue taskQueue;
     private DataQueue dataQueue;
     private String uuid;
+    private String name;
+    private final TaskQueue taskQueue;
+
+    @Autowired
+    public CrawlHttpServerImpl(TaskQueue taskQueue) {
+        this.taskQueue = taskQueue;
+    }
 
 
-    public void reg(String host, ConsumerConfig consumerConfig) {
+    @Override
+    public String reg(String name, String host) {
         this.host = host;
-        this.uuid = post(host + "/api/consumer/reg", Json.toJson(consumerConfig));
+        this.name = name;
+        this.uuid = post(host + "/api/consumer/reg", name);
+        return uuid;
     }
 
-    public String getRunningTasks() {
-        return requestGet(host + "/api/consumer/running-task?uuid=" + uuid);
+    @Override
+    public List<TaskStatistic> getRunningTasks(String uuid) {
+        return Json.toObject(requestGet(host + "/api/consumer/running-task?uuid=" + uuid), new TypeReference<List<TaskStatistic>>() {
+        });
     }
 
-    public ResourceInfo getResourceInfo() {
-        return Json.toObject(requestGet(host + "/api/consumer/resource-info?uuid=" + uuid), ResourceInfo.class);
+    @Override
+    public CrawlerUserInfo getResourceInfo(String uuid) {
+        return Json.toObject(requestGet(host + "/api/consumer/resource-info?uuid=" + uuid), CrawlerUserInfo.class);
     }
 
-    public void addTask(TaskInfo taskInfo) {
-        taskQueue.addTask(taskInfo);
+    public void addTask(String uuid, TaskInfo taskInfo) {
+        taskQueue.addTask(name, taskInfo);
     }
 
     public String getTaskSummary() {
@@ -88,9 +105,9 @@ public class CrawlClientImpl implements CrawlerClient {
         this.dataQueue.setThreadNum(num);
     }
 
-    public void start(String name, String queueHost, int queuePort, Consumer consumer) {
-        this.taskQueue = new TaskQueue(queueHost, queuePort, name);
-        this.dataQueue = new DataQueue(name, consumer);
+    public void start(String name, CrawlerClient crawlerClient) {
+        this.name = name;
+        this.dataQueue = new DataQueue(name, crawlerClient);
         this.dataQueue.start();
         initHttp();
     }
@@ -105,4 +122,6 @@ public class CrawlClientImpl implements CrawlerClient {
         connectionManager.setDefaultMaxPerRoute(20);
         httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).build();
     }
+
+
 }

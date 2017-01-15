@@ -10,13 +10,12 @@ import java.util.List;
  * Created by seveniu on 1/8/17.
  * *
  */
-public interface CrawlerServer {
-    String reg(String name, String host);
+public interface CrawlerUserApi {
 
-    List<TaskStatistic> getRunningTasks(String uuid);
+    List<TaskStatistic> getRunningTasks();
 
-    CrawlerUserInfo getResourceInfo(String uuid);
+    CrawlerUserInfo getResourceInfo();
 
-    void addTask(String uuid, TaskInfo taskInfo);
+    void addTask(TaskInfo taskInfo);
 
 }
