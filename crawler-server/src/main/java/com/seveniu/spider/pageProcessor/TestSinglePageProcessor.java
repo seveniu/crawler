@@ -7,7 +7,7 @@ import com.seveniu.spider.parse.ParseResult;
 import com.seveniu.template.PagesTemplate;
 import com.seveniu.template.def.Field;
 import com.seveniu.template.def.FieldType;
-import com.seveniu.template.def.Template;
+import com.seveniu.template.def.PageTemplate;
 import us.codecraft.webmagic.Page;
 
 import static com.seveniu.def.PageContext.CONTEXT_NODE;
@@ -30,20 +30,20 @@ public class TestSinglePageProcessor extends MyPageProcessor {
     }
 
     @Override
-    protected Template getTemplate(Page page) {
+    protected PageTemplate getTemplate(Page page) {
         // 根据序号找到对应模板
-        Template template = pagesTemplate.getTemplate(0);
-        if (template == null) {
+        PageTemplate pageTemplate = pagesTemplate.getTemplate(0);
+        if (pageTemplate == null) {
             logger.error("can't find template by serial num : {}", 0);
             return null;
         }
-        for (Field field : template.getFields()) {
+        for (Field field : pageTemplate.getFields()) {
             if (field.getType() == FieldType.TARGET_LINK.getId()
                     || field.getType() == FieldType.NEXT_LINK.getId()) {
                 field.setType(FieldType.TEXT_LINK.getId());
             }
         }
-        return template;
+        return pageTemplate;
     }
 
 

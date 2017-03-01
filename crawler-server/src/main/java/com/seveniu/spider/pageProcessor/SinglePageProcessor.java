@@ -6,7 +6,7 @@ import com.seveniu.entity.data.PageResult;
 import com.seveniu.entity.data.Link;
 import com.seveniu.spider.parse.ParseResult;
 import com.seveniu.template.PagesTemplate;
-import com.seveniu.template.def.Template;
+import com.seveniu.template.def.PageTemplate;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 
@@ -30,13 +30,13 @@ public class SinglePageProcessor extends MyPageProcessor {
     }
 
     @Override
-    protected Template getTemplate(Page page) {
+    protected PageTemplate getTemplate(Page page) {
         // 根据序号找到对应模板
-        Template template = pagesTemplate.getTemplate(0);
-        if (template == null) {
+        PageTemplate pageTemplate = pagesTemplate.getTemplate(0);
+        if (pageTemplate == null) {
             logger.error("can't find template by serial num : {}", 0);
         }
-        return template;
+        return pageTemplate;
     }
 
 

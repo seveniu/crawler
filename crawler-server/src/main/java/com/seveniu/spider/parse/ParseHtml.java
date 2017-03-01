@@ -4,7 +4,7 @@ import com.seveniu.entity.data.FieldResult;
 import com.seveniu.entity.data.Link;
 import com.seveniu.template.def.Field;
 import com.seveniu.template.def.FieldType;
-import com.seveniu.template.def.Template;
+import com.seveniu.template.def.PageTemplate;
 import com.seveniu.util.HtmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +28,15 @@ public class ParseHtml {
 
     private ParseResult parseResult;
     private Html html;
-    private Template template;
+    private PageTemplate pageTemplate;
     private String url;
 
-    public static ParseResult parseHtml(String url, Html html, Template template) {
+    public static ParseResult parseHtml(String url, Html html, PageTemplate pageTemplate) {
 
         ParseHtml parseHtml = new ParseHtml();
         parseHtml.url = url;
         parseHtml.html = html;
-        parseHtml.template = template;
+        parseHtml.pageTemplate = pageTemplate;
         parseHtml.parseResult = new ParseResult(url);
         // 去除 script
         html.getDocument().getElementsByTag("script").remove();
@@ -47,18 +47,18 @@ public class ParseHtml {
     /////////////////////////////    parse page    ////////////////////////////
 
     private ParseResult parsePage() {
-        if (template == null) {
+        if (pageTemplate == null) {
             logger.error("url : {} ,template is null", url);
             parseResult.setParseError(new ParseError(null, ParseErrorType.TEMPLATE_ERROR));
             return parseResult;
         }
-        if (template.getFields() == null) {
+        if (pageTemplate.getFields() == null) {
             logger.error("url : {} ,template field is null", url);
             parseResult.setParseError(new ParseError(null, ParseErrorType.TEMPLATE_ERROR));
             return parseResult;
         }
 
-        for (Field field : template.getFields()) {
+        for (Field field : pageTemplate.getFields()) {
             if (parseResult.getParseError() != null) {
                 break;
             }

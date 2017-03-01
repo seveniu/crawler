@@ -4,9 +4,10 @@ import java.util.List;
 
 /**
  * Created by seveniu on 5/12/16.
- * Template
+ * PageTemplate
+ * 单网页模板
  */
-public class Template {
+public class PageTemplate {
     private String name;
     private String url;
     private List<Field> fields;

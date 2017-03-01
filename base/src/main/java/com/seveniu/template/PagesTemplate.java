@@ -1,7 +1,7 @@
 package com.seveniu.template;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.seveniu.template.def.Template;
+import com.seveniu.template.def.PageTemplate;
 import com.seveniu.util.Json;
 
 import java.util.List;
@@ -11,23 +11,23 @@ import java.util.List;
  * PagesTemplate
  */
 public class PagesTemplate {
-    private List<Template> templates;
+    private List<PageTemplate> pageTemplates;
     private String id;
 
     private PagesTemplate() {
     }
 
-    public List<Template> getTemplates() {
-        return templates;
+    public List<PageTemplate> getPageTemplates() {
+        return pageTemplates;
     }
 
-    public void setTemplates(List<Template> templates) {
-        this.templates = templates;
+    public void setPageTemplates(List<PageTemplate> pageTemplates) {
+        this.pageTemplates = pageTemplates;
     }
 
-    public Template getTemplate(int index) {
-        if(index < templates.size()) {
-            return templates.get(index);
+    public PageTemplate getTemplate(int index) {
+        if(index < pageTemplates.size()) {
+            return pageTemplates.get(index);
         }
         return null;
     }
@@ -37,15 +37,15 @@ public class PagesTemplate {
     }
 
     public int pagesNum() {
-        return templates.size();
+        return pageTemplates.size();
     }
 
     public static PagesTemplate fromJson(String id, String json) {
         PagesTemplate pagesTemplate = new PagesTemplate();
-        List<Template> templates = Json.toObject(json, new TypeReference<List<Template>>() {
+        List<PageTemplate> pageTemplates = Json.toObject(json, new TypeReference<List<PageTemplate>>() {
         });
         pagesTemplate.id = id;
-        pagesTemplate.templates = templates;
+        pagesTemplate.pageTemplates = pageTemplates;
         return pagesTemplate;
     }
 
@@ -91,7 +91,7 @@ public class PagesTemplate {
     @Override
     public String toString() {
         return "PagesTemplate{" +
-                "templates=" + templates +
+                "templates=" + pageTemplates +
                 '}';
     }
 

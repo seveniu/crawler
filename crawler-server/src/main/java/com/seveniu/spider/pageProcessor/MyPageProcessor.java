@@ -7,7 +7,7 @@ import com.seveniu.task.TaskStatistic;
 import com.seveniu.spider.parse.ParseHtml;
 import com.seveniu.spider.parse.ParseResult;
 import com.seveniu.template.PagesTemplate;
-import com.seveniu.template.def.Template;
+import com.seveniu.template.def.PageTemplate;
 import com.seveniu.entity.task.TaskInfo;
 import com.seveniu.util.Json;
 import org.slf4j.Logger;
@@ -49,14 +49,14 @@ public abstract class MyPageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         String url = page.getUrl().get();
-        Template template = getTemplate(page);
-        if (template == null) {
+        PageTemplate pageTemplate = getTemplate(page);
+        if (pageTemplate == null) {
             return;
         }
 
 
         //解析页面
-        ParseResult parseResult = ParseHtml.parseHtml(url, page.getHtml(), template);
+        ParseResult parseResult = ParseHtml.parseHtml(url, page.getHtml(), pageTemplate);
         // 统计
         statistic.addSuccessUrlCount(1);
         Node contextNode = (Node) page.getRequest().getExtra(PageContext.CONTEXT_NODE);
@@ -77,7 +77,7 @@ public abstract class MyPageProcessor implements PageProcessor {
     abstract void process0(Page page, ParseResult parseResult);
 
 
-    protected abstract Template getTemplate(Page page);
+    protected abstract PageTemplate getTemplate(Page page);
 
 
     @Override

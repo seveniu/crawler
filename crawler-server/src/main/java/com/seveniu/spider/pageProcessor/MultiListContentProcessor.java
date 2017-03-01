@@ -6,7 +6,7 @@ import com.seveniu.entity.data.Node;
 import com.seveniu.entity.data.PageResult;
 import com.seveniu.spider.parse.ParseResult;
 import com.seveniu.template.PagesTemplate;
-import com.seveniu.template.def.Template;
+import com.seveniu.template.def.PageTemplate;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 
@@ -23,7 +23,7 @@ public class MultiListContentProcessor extends MyPageProcessor {
     }
 
     @Override
-    protected Template getTemplate(Page page) {
+    protected PageTemplate getTemplate(Page page) {
         // 获取页面序号
         Integer serialNum = (Integer) page.getRequest().getExtra(SERIAL_NUM);
         if (serialNum == null) {
@@ -31,12 +31,12 @@ public class MultiListContentProcessor extends MyPageProcessor {
             page.getRequest().putExtra(SERIAL_NUM, serialNum);
         }
         // 根据序号找到对应模板
-        Template template = pagesTemplate.getTemplate(serialNum);
-        if (template == null) {
+        PageTemplate pageTemplate = pagesTemplate.getTemplate(serialNum);
+        if (pageTemplate == null) {
             logger.error("can't find template by serial num : {}", serialNum);
             return null;
         }
-        return template;
+        return pageTemplate;
     }
 
     @Override
