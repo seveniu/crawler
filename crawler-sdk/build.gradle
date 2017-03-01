@@ -1,5 +1,5 @@
-group 'com.seveniu'
-version '1.0'
+//group 'com.seveniu'
+//version '1.0'
 
 apply plugin: 'java'
 //apply plugin: 'org.springframework.boot'

@@ -1,6 +1,6 @@
 rootProject.name = 'crawler'
 include 'base'
-include 'sdk'
-include 'spider'
+include 'crawler-sdk'
+include 'crawler-server'
 include 'sdk-demo'
 

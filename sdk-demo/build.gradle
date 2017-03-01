@@ -4,7 +4,7 @@ version '0.0.1'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    compile project(":sdk")
+    compile project(":crawler-sdk")
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
     testCompile group: 'junit', name: 'junit', version: '4.11'

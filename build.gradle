@@ -2,7 +2,8 @@ group 'com.seveniu'
 version '1.0-SNAPSHOT'
 allprojects {
     apply plugin: 'idea'
-    group 'com.seveniu'
+    apply plugin: "maven"
+    group 'com.seveniu.crawler'
     version = '0.0.1'
 }
 

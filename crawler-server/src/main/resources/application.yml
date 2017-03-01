@@ -1,0 +1,59 @@
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+#server:
+#    port: 9000
+#    address:  # bind to a specific NIC
+#    session-timeout:  # session timeout in seconds
+#    context-parameters.*:  # Servlet context init parameters, e.g. server.context-parameters.a=alpha
+#    context-path:  # the context path, defaults to '/'
+#    jsp-servlet.class-name: org.apache.jasper.servlet.JspServlet # The class name of the JSP servlet
+#    jsp-servlet.init-parameters.*:  # Init parameters used to configure the JSP servlet
+#    jsp-servlet.registered: true # Whether or not the JSP servlet is registered
+#    servlet-path:  # the servlet path, defaults to '/'
+#    display-name: xxx # the display name of the application
+server:
+    port: 20001
+    session:
+        cookie:
+            name: CRAWL_SESSION
+
+#spring.view.prefix: templates
+
+#shell.command-path-patterns= # classpath*:/commands/**, classpath*:/crash/commands/**
+management:
+  shell:
+    auth:
+      simple:
+        user:
+          name: dhlz
+          password: 123
+    ssh:
+      port: 20002
+      enabled: true
+#    command-path-patterns: classpath*:/cmd/** #defalut /commands/**,/crash/commands/**
+
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&relaxAutoCommit=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&autoReconnect=true
+    username: root
+    password: passw0rd
+dataQueue: true
+thriftServerPort: 20003
+
+---
+spring:
+  profiles: product
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  datasource:
+    url: jdbc:mysql://rm-2zekr40y2iyir1b1w.mysql.rds.aliyuncs.com/data_queue?relaxAutoCommit=true&amp;autoCommit=false&amp;zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;autoReconnect=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: dhlz
+    password: Qntf-dK8jpD9TlaWf_qg
+    platform: mysql
+dataQueue: true
+thriftServerPort: 20003
+
