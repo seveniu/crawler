@@ -9,6 +9,18 @@ public class DBUtil {
 
     private static Connection con = null;
 
+    public synchronized static Connection openConnection(String url, String username, String password) throws SQLException, ClassNotFoundException, IOException {
+        if (null == con || con.isClosed()) {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, username, password);
+        }
+        return con;
+    }
+
+//    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
+//        openConnection("jdbc:mysql://127.0.0.1:3306/data-queue", "root", "passw0rd");
+//    }
+
     public synchronized static Connection openConnection() throws SQLException, ClassNotFoundException, IOException {
         if (null == con || con.isClosed()) {
             Properties p = new Properties();

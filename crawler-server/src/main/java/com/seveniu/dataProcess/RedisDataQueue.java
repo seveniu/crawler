@@ -23,8 +23,8 @@ public class RedisDataQueue implements DataQueue {
     private JedisPool jedisPool;
 
     @Autowired
-    public RedisDataQueue(@Value("${spring.redis.host}") String host,
-                          @Value("${spring.redis.port}") int port) {
+    public RedisDataQueue(@Value("${crawler.redis.host}") String host,
+                          @Value("${crawler.redis.port}") int port) {
         logger.info("data queue host : {} , port : {}", host, port);
         this.jedisPool = new JedisPool(host, port);
     }

@@ -1,6 +1,6 @@
 package com.seveniu.user;
 
-import com.seveniu.CrawlerClientConfig;
+import com.seveniu.CrawlerSDK;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
  * *
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CrawlerClientConfig.class)
-public class CrawlerClientTest {
+@SpringBootTest(classes = CrawlerSDK.class)
+public class CrawlerClientReceiverTest {
 
     @Test
     public void has() throws Exception {

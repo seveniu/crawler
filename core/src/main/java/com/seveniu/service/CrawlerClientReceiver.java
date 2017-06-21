@@ -8,7 +8,7 @@ import com.seveniu.task.TaskStatistic;
  * Created by seveniu on 5/26/16.
  * Consumer
  */
-public interface CrawlerClient {
+public interface CrawlerClientReceiver {
 
     boolean has(String url);
 

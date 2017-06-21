@@ -1,0 +1,19 @@
+
+spring:
+  datasource:
+    validationQuery: SELECT 1
+    url: jdbc:mysql://127.0.0.1:3306/test
+    username: root
+    password: password
+  jpa:
+    show_sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+server:
+  port: 7777
+
+crawler:
+  redis:
+    host: 127.0.0.1
+    port: 6379

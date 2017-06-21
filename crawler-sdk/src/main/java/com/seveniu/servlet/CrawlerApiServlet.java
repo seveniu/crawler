@@ -1,7 +1,7 @@
 package com.seveniu.servlet;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.seveniu.service.CrawlerClient;
+import com.seveniu.service.CrawlerClientReceiver;
 import com.seveniu.def.TaskStatus;
 import com.seveniu.entity.data.Node;
 import com.seveniu.service.RequestBody;
@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
  */
 public class CrawlerApiServlet extends HttpServlet {
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    private CrawlerClient crawlerClient;
+    private CrawlerClientReceiver crawlerClientReceiver;
 
-    public CrawlerApiServlet(CrawlerClient crawlerClient) {
-        this.crawlerClient = crawlerClient;
+    public CrawlerApiServlet(CrawlerClientReceiver crawlerClientReceiver) {
+        this.crawlerClientReceiver = crawlerClientReceiver;
     }
 
     @Override
@@ -50,22 +50,22 @@ public class CrawlerApiServlet extends HttpServlet {
         Object result = null;
         switch (action) {
             case "has":
-                result = crawlerClient.has(data);
+                result = crawlerClientReceiver.has(data);
                 break;
             case "done":
                 Node node = Json.toObject(data, Node.class);
-                crawlerClient.done(node);
+                crawlerClientReceiver.done(node);
                 break;
             case "statistic":
                 TaskStatistic taskStatistic = Json.toObject(data, TaskStatistic.class);
-                crawlerClient.statistic(taskStatistic);
+                crawlerClientReceiver.statistic(taskStatistic);
                 break;
             case "taskStatusChange":
                 Map<String, Object> map = Json.toObject(data, new TypeReference<Map<String, Object>>() {
                 });
                 String taskId = (String) map.get("taskId");
                 String status = (String) map.get("status");
-                crawlerClient.taskStatusChange(taskId, TaskStatus.valueOf(status));
+                crawlerClientReceiver.taskStatusChange(taskId, TaskStatus.valueOf(status));
                 break;
         }
         response.setContentType("application/json;charset=UTF-8");

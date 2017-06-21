@@ -2,9 +2,9 @@
 spring:
   datasource:
     validationQuery: SELECT 1
-    url: jdbc:mysql://10.211.55.3:3306/test
-    username: xxx
-    password: password
+    url: jdbc:mysql://127.0.0.1:3306/test
+    username: root
+    password: passw0rd
   jpa:
     show_sql: true
     hibernate:
@@ -14,6 +14,15 @@ server:
   port: 7777
 
 crawler:
+  name: demo
+  host: http://127.0.0.1:7777
+  server:
+    host: http://127.0.0.1:20001
+  data:
+    url: jdbc:mysql://127.0.0.1:3306/data_queue?relaxAutoCommit=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&autoReconnect=true&useSSL=false
+    username: root
+    password: passw0rd
+    emptySleepTime: 60
   redis:
-    host: 10.211.55.3
+    host: 127.0.0.1
     port: 6379

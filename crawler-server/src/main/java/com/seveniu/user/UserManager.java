@@ -3,7 +3,7 @@ package com.seveniu.user;
 import com.seveniu.SpiderRegulate;
 import com.seveniu.entity.task.CrawlerUserInfo;
 import com.seveniu.entity.task.TaskInfo;
-import com.seveniu.service.CrawlerClient;
+import com.seveniu.service.CrawlerClientReceiver;
 import com.seveniu.service.CrawlerServer;
 import com.seveniu.service.task.TaskQueue;
 import com.seveniu.task.TaskStatistic;
@@ -79,7 +79,7 @@ public class UserManager implements DisposableBean, CrawlerServer {
                 removeConsumer(consumer.getUuid());
                 logger.warn("remote consumer '{}' has reg, remove old", name);
             }
-            CrawlerClient consumerClient = new HttpRemoteConsumer(host);
+            CrawlerClientReceiver consumerClient = new HttpRemoteConsumer(host);
             consumer = new CrawlerUser(name, consumerClient);
             consumer.start();
             logger.info("reg remote consumer : {}", consumer);

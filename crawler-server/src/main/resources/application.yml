@@ -32,22 +32,25 @@ management:
 #    command-path-patterns: classpath*:/cmd/** #defalut /commands/**,/crash/commands/**
 
 spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/data_queue?useSSL=false&relaxAutoCommit=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&autoReconnect=true
+    username: root
+    password: passw0rd
+
+crawler:
   redis:
     host: 127.0.0.1
     port: 6379
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&relaxAutoCommit=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&autoReconnect=true
-    username: root
-    password: passw0rd
 dataQueue: true
 thriftServerPort: 20003
 
 ---
-spring:
-  profiles: product
+crawler:
   redis:
     host: 127.0.0.1
     port: 6379
+spring:
+  profiles: product
   datasource:
     url: jdbc:mysql://rm-2zekr40y2iyir1b1w.mysql.rds.aliyuncs.com/data_queue?relaxAutoCommit=true&amp;autoCommit=false&amp;zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;autoReconnect=true
     driver-class-name: com.mysql.jdbc.Driver

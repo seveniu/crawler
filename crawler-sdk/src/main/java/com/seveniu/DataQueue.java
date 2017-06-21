@@ -1,11 +1,14 @@
 package com.seveniu;
 
-import com.seveniu.service.CrawlerClient;
 import com.seveniu.entity.data.Node;
+import com.seveniu.service.CrawlerClientReceiver;
 import com.seveniu.util.DBUtil;
 import com.seveniu.util.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,37 +22,40 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by seveniu on 10/11/16.
  * *
  */
+@Service
 public class DataQueue {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final static String PREFIX = "data-";
     private String key;
-    private CrawlerClient crawlerClient;
+    private CrawlerClientReceiver crawlerClientReceiver;
     private int threadNum = 20;
+    @Value("${crawler.data.url}")
+    String url;
+    @Value("${crawler.data.username}")
+    String username;
+    @Value("${crawler.data.password}")
+    String password;
+    @Value("${crawler.data.emptySleepTime:60}")
+    int emptySleepTime;
 
-    public DataQueue(String key, CrawlerClient crawlerClient) {
-        this.key = key;
-        this.crawlerClient = crawlerClient;
+    @Autowired
+    public DataQueue(@Value("${crawler.name}") String name, CrawlerClientReceiver crawlerClientReceiver) {
+        this.key = name;
+        this.crawlerClientReceiver = crawlerClientReceiver;
     }
 
     private ThreadPoolExecutor threadPoolExecutor;
 
     public void start() {
         init();
-        int sleepTime = 60; // second
         try {
-            DBUtil.openConnection();
-            Properties p = new Properties();
-            p.load(DataQueue.class.getResourceAsStream("/dataQueue.properties"));
-            String sleepStr = p.getProperty("emptySleepTime");
-            if (sleepStr != null) {
-                sleepTime = Integer.parseInt(sleepStr);
-            }
+            DBUtil.openConnection(url, username, password);
         } catch (SQLException | ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
-        int finalSleepTime = sleepTime;
+        int finalSleepTime = emptySleepTime;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -84,7 +90,7 @@ public class DataQueue {
                                 @Override
                                 public void run() {
                                     try {
-                                        crawlerClient.done(Json.toObject(data, Node.class));
+                                        crawlerClientReceiver.done(Json.toObject(data, Node.class));
                                         DBUtil.update("delete from queue where id =?", id);
                                         TimeUnit.SECONDS.sleep(1);
                                     } catch (Exception e) {
@@ -142,8 +148,8 @@ public class DataQueue {
         this.key = key;
     }
 
-    public void setCrawlerClient(CrawlerClient crawlerClient) {
-        this.crawlerClient = crawlerClient;
+    public void setCrawlerClientReceiver(CrawlerClientReceiver crawlerClientReceiver) {
+        this.crawlerClientReceiver = crawlerClientReceiver;
     }
 
     public void setThreadNum(int threadNum) {

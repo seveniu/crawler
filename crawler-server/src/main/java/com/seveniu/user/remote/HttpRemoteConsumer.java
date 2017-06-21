@@ -2,7 +2,7 @@ package com.seveniu.user.remote;
 
 import com.seveniu.def.TaskStatus;
 import com.seveniu.entity.data.Node;
-import com.seveniu.service.CrawlerClient;
+import com.seveniu.service.CrawlerClientReceiver;
 import com.seveniu.service.RequestBody;
 import com.seveniu.task.TaskStatistic;
 import com.seveniu.util.Json;
@@ -25,7 +25,7 @@ import java.util.Map;
  * Created by seveniu on 5/24/16.
  * RemoteConsumer
  */
-public class HttpRemoteConsumer implements CrawlerClient {
+public class HttpRemoteConsumer implements CrawlerClientReceiver {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private RemoteRequest remoteRequest;
     private String requestUrl;

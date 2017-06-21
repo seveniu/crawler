@@ -18,7 +18,7 @@ public class TaskQueue {
 
     private JedisPool pool;
 
-    public TaskQueue(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port}") int port) {
+    public TaskQueue(@Value("${crawler.redis.host}") String host, @Value("${crawler.redis.port}") int port) {
         this.pool = new JedisPool(host, port);
     }
 

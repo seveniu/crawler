@@ -3,7 +3,7 @@ package com.seveniu.user;
 import com.seveniu.entity.data.Node;
 import com.seveniu.entity.task.CrawlerUserInfo;
 import com.seveniu.entity.task.TaskInfo;
-import com.seveniu.service.CrawlerClient;
+import com.seveniu.service.CrawlerClientReceiver;
 import com.seveniu.service.CrawlerUserApi;
 import com.seveniu.task.TaskStatistic;
 import org.slf4j.Logger;
@@ -27,14 +27,14 @@ public class CrawlerUser implements CrawlerUserApi {
     private String name; // 外部使用
 
     private UserTaskManager taskManager;
-    private CrawlerClient client;
+    private CrawlerClientReceiver client;
 
     private LinkedBlockingQueue<Runnable> dataQueue;
     private ExecutorService transferService;
 
     protected volatile STATUS status = STATUS.UN_START;
 
-    public CrawlerUser(String name, CrawlerClient consumerClient) {
+    public CrawlerUser(String name, CrawlerClientReceiver consumerClient) {
         this.name = name;
         this.uuid = UUID.randomUUID().toString();
         this.uuid = name;
@@ -78,11 +78,11 @@ public class CrawlerUser implements CrawlerUserApi {
         });
     }
 
-    public CrawlerClient getClient() {
+    public CrawlerClientReceiver getClient() {
         return client;
     }
 
-    void changeClient(CrawlerClient client) {
+    void changeClient(CrawlerClientReceiver client) {
         this.uuid = UUID.randomUUID().toString();
         this.client.stop();
         this.client = client;
